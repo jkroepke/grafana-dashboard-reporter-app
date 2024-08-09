@@ -175,6 +175,12 @@ func (app *App) handleReport(w http.ResponseWriter, req *http.Request) {
 			HeaderName:  backend.CookiesHeaderName,
 			HeaderValue: req.Header.Get(backend.CookiesHeaderName),
 		}
+	// Requires Grafana v10.3.0+ and feature flag "idForwarding" enabled
+	case req.Header.Get("X-Grafana-Id") != "":
+		credential = client.Credential{
+			HeaderName:  "X-Grafana-Id",
+			HeaderValue: req.Header.Get("X-Grafana-Id"),
+		}
 	case req.Header.Get(backend.OAuthIdentityTokenHeaderName) != "":
 		credential = client.Credential{
 			HeaderName:  backend.OAuthIdentityTokenHeaderName,
